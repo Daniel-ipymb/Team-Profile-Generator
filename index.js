@@ -3,13 +3,16 @@ const fs = require("fs");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-// const generateHTML = require("./src/generateHTML");
+const generatedHtml = require("./src/generatedHtml");
+const { connectableObservableDescriptor } = require("rxjs/internal/observable/ConnectableObservable");
+
+const employees = [];
 
 const startPrompt = async () => {
-	await inquirer.prompt([
+	const questions = await inquirer.prompt([
 		{
 			type: "input",
-			message: "What is the tem manager's name?",
+			message: "What is the team manager's name?",
 			name: "name",
 		},
 		{
@@ -28,6 +31,10 @@ const startPrompt = async () => {
 			name: "officeNumber",
 		},
 	]);
+	const { name, id, email, officeNumber } = questions;
+	const manager = new Manager(name, id, email, officeNumber);
+	employees.push(manager);
+	console.log("quesions", questions);
 	addTeamMember();
 };
 
@@ -46,12 +53,12 @@ const addTeamMember = async () => {
 	} else if (answer.addTeamMember === "add an intern") {
 		addIntern();
 	} else if (answer.addTeamMember === "finish building team") {
-    createTeam()
+		fs.writeFile("index.html",generatedHtml(employees), (err) => err ? console.log(err) : console.log("Generating html"))
 	}
 };
 
 const addEngineer = async () => {
-	await inquirer.prompt([
+	const engData = await inquirer.prompt([
 		{
 			type: "input",
 			message: "What is the engineer's name?",
@@ -73,11 +80,15 @@ const addEngineer = async () => {
 			name: "github",
 		},
 	]);
-  addTeamMember()
+	let { name, id, email, github } = engData;
+	let engineer = new Engineer(name, id, email, github);
+	employees.push(engineer);
+	console.log(employees);
+	addTeamMember();
 };
 
 const addIntern = async () => {
-	await inquirer.prompt([
+	const internData = await inquirer.prompt([
 		{
 			type: "input",
 			message: "What is the intern's name?",
@@ -99,18 +110,23 @@ const addIntern = async () => {
 			name: "school",
 		},
 	]);
-  addTeamMember()
+	let { name, id, email, school } = internData;
+	let intern = new Intern(name, id, email, school);
+	employees.push(intern);
+	console.log(intern);
+	addTeamMember();
 };
 
-function writeToFile(fileName, generatedHTML ) {
-  fs.writeFile("./dist/index.html", generatedHTML, (err) => 
-  err ? console.log(err) : console.log('Success!'))
+// function writeToFile(fileName, generatedHTML) {
+// 	fs.writeFile(fileName, generatedHTML, (err) =>
+// 		err ? console.log(err) : console.log("Success!")
+// 	);
+// }
+
+function writeToFile(fileName, data) {
+	fs.writeFile(fileName, data, (err) => {
+		err ? console.log(err) : console.log("Great Success!");
+	});
 }
-
-function createTeam() {
-
-}
-
-
 
 startPrompt();
