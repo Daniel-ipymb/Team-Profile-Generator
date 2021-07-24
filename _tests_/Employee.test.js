@@ -2,7 +2,7 @@ const Employee = require("../lib/Employee");
 
 describe("Employee", () => {
 	describe("Initialization", () => {
-		it("should return an object containing a 'name', 'id', and 'email' properties when called with the 'new' keyword", () => {
+		it("should return an object containing a 'name', 'id', and 'email' properties", () => {
 			const employee = new Employee();
 
 			expect("name" in employee).toEqual(true);
@@ -35,7 +35,7 @@ describe("Employee", () => {
 	});
 
 	describe("getRole", () => {
-		it("Should return role", () => {
+		it("Should return 'Employee", () => {
 			const role = "Employee";
 			const employee = new Employee("Daniel", 1, "daniel@me.com");
 			expect(employee.getRole()).toEqual(role);
