@@ -46,7 +46,7 @@ const addTeamMember = async () => {
 	} else if (answer.addTeamMember === "add an intern") {
 		addIntern();
 	} else if (answer.addTeamMember === "finish building team") {
-    init()
+    createTeam()
 	}
 };
 
@@ -102,7 +102,12 @@ const addIntern = async () => {
   addTeamMember()
 };
 
-function init() {
+function writeToFile(fileName, generatedHTML ) {
+  fs.writeFile("./dist/index.html", generatedHTML, (err) => 
+  err ? console.log(err) : console.log('Success!'))
+}
+
+function createTeam() {
 
 }
 
